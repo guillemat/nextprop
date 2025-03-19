@@ -7,8 +7,10 @@ export default function ShowCookieData() {
   const [cookieData, setCookieData] = useState<any>(null);
 
   useEffect(() => {
-    const checkCookie = () => {
-      const cookie = getCookie('jsonrecibido');
+    const checkCookie = async () => {
+      const cookie: string | undefined = await getCookie('jsonrecibido');
+
+
       if (cookie) {
         const parsedData = JSON.parse(cookie);
         setCookieData(parsedData);
