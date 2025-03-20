@@ -1,29 +1,20 @@
-'use client'; 
+'use client';
 
-import { useState } from 'react';
-import { MyData } from '../types/types';
+import { useEffect, useState } from 'react';
 
-export default function Info() {
-  const [jsonData, setJsonData] = useState<MyData | null>(null);
+export default function InfoPage() {
+  const [data, setData] = useState(null);
 
-  const getData = async () => {
-    const response = await fetch('/api/get-json');
-    const data = (await response.json()) as MyData;
-    setJsonData(data);
-    console.log('Retrieved data:', data);
-  };
+  useEffect(() => {
+    fetch('/api/get-json')
+      .then((res) => res.json())
+      .then((json) => setData(json.data));
+  }, []);
 
   return (
     <div>
-      <h1>Json recibido</h1>
-      <button onClick={getData}>Get JSON</button>
-
-      {jsonData && (
-        <div>
-          <h2>Retrieved JSON:</h2>
-          <pre>{JSON.stringify(jsonData, null, 2)}</pre>
-        </div>
-      )}
+      <h1>Último JSON en Supabase:</h1>
+      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>Cargando datos...</p>}
     </div>
   );
 }
